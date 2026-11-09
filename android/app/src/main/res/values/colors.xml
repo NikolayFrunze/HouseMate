@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- Login screen palette (light) -->
+    <color name="login_bg_start">#FFE8F0FF</color>
+    <color name="login_bg_end">#FFF8FAFF</color>
+    <color name="login_primary">#FF3651D4</color>
+    <color name="login_on_primary">#FFFFFFFF</color>
+    <color name="login_surface">#FFFFFFFF</color>
+    <color name="login_stroke">#FFC9D3E6</color>
+    <color name="login_text_primary">#FF1B1F2A</color>
+    <color name="login_text_secondary">#FF5C6478</color>
+</resources>

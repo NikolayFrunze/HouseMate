@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingVertical="12dp">
+
+    <!-- Name and total amount, for example "Luz: 80$" -->
+    <TextView
+        android:id="@+id/textExpenseName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-medium"
+        android:textColor="@color/login_text_primary"
+        android:textSize="18sp" />
+
+    <!-- How the amount is split, for example "5 people → 16$ each" -->
+    <TextView
+        android:id="@+id/textExpenseDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textColor="@color/login_text_secondary"
+        android:textSize="16sp" />
+
+</LinearLayout>
