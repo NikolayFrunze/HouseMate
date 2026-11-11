@@ -26,6 +26,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation")
     runtimeOnly("org.postgresql:postgresql")
     implementation("org.springframework.security:spring-security-crypto")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.4")
 }
 
 tasks.test {

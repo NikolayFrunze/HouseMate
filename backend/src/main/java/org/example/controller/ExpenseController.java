@@ -1,6 +1,12 @@
 package org.example.controller;
 
 import jakarta.validation.Valid;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.dto.CreateExpenseRequest;
 import org.example.dto.ExpenseResponse;
 import org.example.dto.ExpensesResponse;
@@ -16,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
  *                                    or 404 if the user does not belong to a house
  *   POST /users/{userId}/expenses -> 201 with the saved expense, or 404 if the user has no house
  */
+@Tag(name = "Expenses", description = "Shared expenses of the house of a user")
 @RestController
 @RequestMapping("/users/{userId}/expenses")
 public class ExpenseController {
@@ -32,6 +39,9 @@ public class ExpenseController {
      * GET /users/{userId}/expenses
      * Returns the expenses of the house of the user and what each member has to pay.
      */
+    @Operation(summary = "List the expenses of the user's house and each member's share")
+    @ApiResponse(responseCode = "200", description = "Expenses of the house")
+    @ApiResponse(responseCode = "404", description = "User does not belong to a house", content = @Content(mediaType = "text/plain", schema = @Schema(type = "string")))
     @GetMapping
     public ResponseEntity<ExpensesResponse> getExpenses(@PathVariable Long userId) {
         return ResponseEntity.ok(expenseService.getExpenses(userId));
@@ -41,6 +51,10 @@ public class ExpenseController {
      * POST /users/{userId}/expenses
      * Adds an expense to the house of the user. Returns 201 (Created) with the saved expense.
      */
+    @Operation(summary = "Add an expense to the user's house")
+    @ApiResponse(responseCode = "201", description = "Expense created")
+    @ApiResponse(responseCode = "400", description = "Validation error", content = @Content)
+    @ApiResponse(responseCode = "404", description = "User does not belong to a house", content = @Content(mediaType = "text/plain", schema = @Schema(type = "string")))
     @PostMapping
     public ResponseEntity<ExpenseResponse> addExpense(@PathVariable Long userId,
                                                       @Valid @RequestBody CreateExpenseRequest request) {
