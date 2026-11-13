@@ -31,10 +31,8 @@ public class HouseService {
     private final HouseMemberRepository houseMemberRepository;
     // Used to check that the user exists before giving them a house
     private final UserRepository userRepository;
-
     private static final int CODE_LENGTH = 6;
     private static final SecureRandom random = new SecureRandom();
-
     private static final String alphabet = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
 
     // Spring injects all the dependencies automatically through the constructor

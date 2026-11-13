@@ -13,8 +13,6 @@ public record CreateHouseRequest(
         // Postal code: required, max 20 characters
         @NotBlank @Size(max = 20) String postalCode,
         // Housing code: required, max 50 characters
-        @NotBlank @Size(max = 50) String housingCode,
-
-        @NotBlank @Size(max = 6) String joinCode
+        @NotBlank @Size(max = 50) String housingCode
 ) {
 }
