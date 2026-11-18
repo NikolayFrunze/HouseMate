@@ -2,7 +2,9 @@ package org.example.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.example.entity.RoleType;
 
 /**
  * Data received in POST /users to create a new user.
@@ -16,6 +18,8 @@ public record CreateUserRequest(
         // Email: required, must have a valid format, max 255 characters
         @NotBlank @Email @Size(max = 255) String email,
         // BCrypt only uses the first 72 bytes, that is why the maximum is 72
-        @NotBlank @Size(min = 8, max = 72) String password
-) {
+        @NotBlank @Size(min = 8, max = 72) String password,
+        // Role: required, must be one of the RoleType values (User or Landlord)
+        @NotNull RoleType role
+        ) {
 }

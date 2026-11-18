@@ -12,10 +12,13 @@ public class CreateUserRequest {
     public final String email;
     // Password in plain text (the backend encrypts it before saving)
     public final String password;
+    // Role chosen by the user: "User" or "Landlord" (must match the backend enum)
+    public final String role;
 
-    public CreateUserRequest(String username, String email, String password) {
+    public CreateUserRequest(String username, String email, String password, String role) {
         this.username = username;
         this.email = email;
         this.password = password;
+        this.role = role;
     }
 }

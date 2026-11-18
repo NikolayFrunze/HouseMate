@@ -6,6 +6,8 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -48,6 +50,8 @@ public class RegisterActivity extends AppCompatActivity {
 
     // Input fields
     EditText username, email, password;
+    // Role dropdown ("User" or "Landlord")
+    AutoCompleteTextView role;
     // "Save" button
     Button save;
 
@@ -73,6 +77,12 @@ public class RegisterActivity extends AppCompatActivity {
         email = findViewById(R.id.editTextEmailAddress);
         password = findViewById(R.id.editTextPassword);
         save = findViewById(R.id.buttonSave);
+        role = findViewById(R.id.autoCompleteRole);
+
+        // Fill the dropdown with the two roles (values come from strings.xml)
+        role.setAdapter(new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1,
+                getResources().getStringArray(R.array.role_options)));
 
         // When "Save" is pressed
         save.setOnClickListener(view -> {
@@ -95,13 +105,20 @@ public class RegisterActivity extends AppCompatActivity {
         String usernameText = username.getText().toString().trim();
         String emailText = email.getText().toString().trim();
         String passwordText = password.getText().toString();
+        String roleText = role.getText().toString().trim();
+
+        // The role is required: stop here if none was chosen
+        if (roleText.isEmpty()) {
+            Toast.makeText(this, R.string.role_required, Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         // Disable the button while the request is running
         save.setEnabled(false);
 
         ApiClient.userApi()
                 // Build the request with the data of the form
-                .createUser(new CreateUserRequest(usernameText, emailText, passwordText))
+                .createUser(new CreateUserRequest(usernameText, emailText, passwordText, roleText))
                 // Send it in the background and handle the answer in the callback
                 .enqueue(new Callback<UserResponse>() {
 
@@ -139,6 +156,8 @@ public class RegisterActivity extends AppCompatActivity {
         username.setText("");
         email.setText("");
         password.setText("");
+        // false = don't filter the list when clearing the text
+        role.setText("", false);
         // Put the cursor back in the first field
         username.requestFocus();
     }

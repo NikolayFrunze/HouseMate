@@ -8,6 +8,12 @@
     <string name="username">Username</string>
     <string name="save">Save</string>
     <string name="register_tagline">Create your account</string>
+    <string name="role_label">Role</string>
+    <string-array name="role_options">
+        <item>User</item>
+        <item>Landlord</item>
+    </string-array>
+    <string name="role_required">Please choose a role</string>
     <string name="account_created">Account created</string>
     <string name="email_already_registered">That email is already registered</string>
     <string name="invalid_data">Please check the data you entered</string>

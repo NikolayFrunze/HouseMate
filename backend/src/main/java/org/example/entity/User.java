@@ -27,15 +27,21 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private RoleType role;
+
+
     // JPA needs an empty constructor to create objects from database rows
     public User() {
     }
 
     // Constructor used when creating a new user
-    public User(String username, String email, String password) {
+    public User(String username, String email, String password, RoleType role) {
         this.username = username;
         this.email = email;
         this.password = password;
+        this.role = role;
     }
 
     // Getters: read the values of the fields (there are no setters on purpose)
@@ -46,4 +52,7 @@ public class User {
     public String getEmail() { return email; }
 
     public String getPassword() { return password; }
+
+    public RoleType getRole() { return role; }
+
 }

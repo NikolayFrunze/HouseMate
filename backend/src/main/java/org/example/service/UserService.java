@@ -46,13 +46,14 @@ public class UserService {
         User user = new User(
                 request.username().trim(),
                 email,
-                passwordEncoder.encode(request.password())
+                passwordEncoder.encode(request.password()),
+                request.role()
         );
 
         try {
             // Save the user and return only the safe data (no password)
             User saved = userRepository.save(user);
-            return new UserResponse(saved.getId(), saved.getUsername(), saved.getEmail());
+            return new UserResponse(saved.getId(), saved.getUsername(), saved.getEmail(),saved.getRole());
         } catch (DataIntegrityViolationException e) {
             // Two requests at the same time can both pass the check above.
             // The unique index on the email column is the real guarantee.
@@ -75,7 +76,7 @@ public class UserService {
                 // No user, or wrong password: throw the error
                 .orElseThrow(InvalidCredentialsException::new);
 
-        return new UserResponse(user.getId(), user.getUsername(), user.getEmail());
+        return new UserResponse(user.getId(), user.getUsername(), user.getEmail(), user.getRole());
     }
 
     // Removes spaces and converts to lowercase, so emails are compared in the same way
