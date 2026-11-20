@@ -43,6 +43,7 @@
     <string name="house_join_code_format">Join code: %1$s</string>
     <string name="house_invalid_code">The code is not correct</string>
     <string name="house_joined">You joined the house</string>
+    <string name="house_wrong_role">Your role cannot do this action</string>
 
     <!-- Expenses screen -->
     <string name="expenses_button">Expenses</string>

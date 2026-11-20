@@ -1,12 +1,19 @@
 package com.example.housemate.ui;
 
+import static com.example.housemate.ui.LoginActivity.PREFS_NAME;
+
 import com.example.housemate.R;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.NavGraph;
+import androidx.navigation.fragment.NavHostFragment;
 
 /**
  * Main window of the user after a successful login.
@@ -20,34 +27,34 @@ public class UserActivity extends AppCompatActivity {
     public static final String EXTRA_USERNAME = "username";
     public static final String EXTRA_EMAIL = "email";
 
+    public static final String EXTRA_ROLE = "role";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Load the layout XML (res/layout/user_activity.xml)
         setContentView(R.layout.user_activity);
 
-        TextView welcome = findViewById(R.id.textWelcome);
+        SharedPreferences sharedPref = this.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        String role = sharedPref.getString(EXTRA_ROLE, "");
 
-        // Read the data that LoginActivity put in the Intent
-        Intent intent = getIntent();
-        String username = intent.getStringExtra(EXTRA_USERNAME);
-        // Show "Welcome, <username>" if the name was received
-        if (username != null) {
-            welcome.setText(getString(R.string.welcome_user, username));
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.nav_host_fragment_content_main);
+        NavController navController = navHostFragment.getNavController();
+        NavGraph graph = navController.getNavInflater().inflate(R.navigation.nav_graph);
+
+        switch (role) {
+            case "User":
+                graph.setStartDestination(R.id.UserHomeFragment);
+                break;
+            case "Landlord":
+                graph.setStartDestination(R.id.LandlordHomeFragment);
+                break;
+            default:
+                startActivity(new Intent(this, LoginActivity.class));
+                finish();
+                return;
         }
+        navController.setGraph(graph);
 
-        // "House" button: open HouseActivity and pass the user id to it
-        findViewById(R.id.buttonHouse).setOnClickListener(view -> {
-            Intent houseIntent = new Intent(this, HouseActivity.class);
-            houseIntent.putExtra(EXTRA_USER_ID, intent.getLongExtra(EXTRA_USER_ID, -1L));
-            startActivity(houseIntent);
-        });
-
-        // "Expenses" button: open ExpenseActivity and pass the user id to it
-        findViewById(R.id.buttonExpenses).setOnClickListener(view -> {
-            Intent expensesIntent = new Intent(this, ExpenseActivity.class);
-            expensesIntent.putExtra(EXTRA_USER_ID, intent.getLongExtra(EXTRA_USER_ID, -1L));
-            startActivity(expensesIntent);
-        });
     }
 }

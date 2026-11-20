@@ -13,4 +13,6 @@ public class UserResponse {
     public String username;
     // Email of the user
     public String email;
+
+    public String role;
 }

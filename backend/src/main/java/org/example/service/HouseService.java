@@ -4,6 +4,7 @@ import org.example.dto.CreateHouseRequest;
 import org.example.dto.HouseResponse;
 import org.example.entity.House;
 import org.example.entity.HouseMember;
+import org.example.entity.RoleType;
 import org.example.entity.User;
 import org.example.repository.HouseMemberRepository;
 import org.example.repository.HouseRepository;
@@ -63,6 +64,11 @@ public class HouseService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
 
+        // Only landlords create houses. The landlord becomes the owner (house.user).
+        if (user.getRole() != RoleType.Landlord) {
+            throw new WrongRoleException("Only landlords can create a house");
+        }
+
         // First check: does this user already belong to a house?
         if (houseMemberRepository.existsByUserId(userId)) {
             throw new HouseAlreadyExistsException(userId);
@@ -98,6 +104,11 @@ public class HouseService {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
+
+        // Only normal users join a house with a code. Landlords create houses instead.
+        if (user.getRole() != RoleType.User) {
+            throw new WrongRoleException("Only users can join a house with a code");
+        }
 
             if (houseMemberRepository.existsByUserId(userId)) {
 
@@ -158,6 +169,17 @@ public class HouseService {
 
         public InvalidCodeException() {
             super("The joinCode is not correct");
+        }
+    }
+
+    /**
+     * Error thrown when the user's role is not allowed for the action
+     * (landlords create houses, users join them). Controller answers 403 (Forbidden).
+     */
+    public static class WrongRoleException extends RuntimeException {
+
+        public WrongRoleException(String message) {
+            super(message);
         }
     }
 }

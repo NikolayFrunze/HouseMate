@@ -102,4 +102,13 @@ public class HouseController {
     public ResponseEntity<String> handleInvalidCode(HouseService.InvalidCodeException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
+
+    /**
+     * Handles the error when the user's role is not allowed for this action.
+     * Returns 403 (Forbidden) with the error message as text.
+     */
+    @ExceptionHandler(HouseService.WrongRoleException.class)
+    public ResponseEntity<String> handleWrongRole(HouseService.WrongRoleException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
+    }
 }

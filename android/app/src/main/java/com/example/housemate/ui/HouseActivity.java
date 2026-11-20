@@ -2,6 +2,8 @@ package com.example.housemate.ui;
 
 import com.example.housemate.R;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -35,6 +37,8 @@ public class HouseActivity extends AppCompatActivity {
 
     // Id of the logged user, received from UserActivity
     private long userId;
+    // Role of the logged user: "User" (can join a house) or "Landlord" (can create one)
+    private String role;
 
     // Message shown at the top ("You don't belong to any house", errors, loading...)
     private TextView textMessage;
@@ -70,6 +74,10 @@ public class HouseActivity extends AppCompatActivity {
             finish();
             return;
         }
+
+        // Read the role saved at login (the same value UserActivity uses)
+        SharedPreferences sharedPref = getSharedPreferences(LoginActivity.PREFS_NAME, Context.MODE_PRIVATE);
+        role = sharedPref.getString(UserActivity.EXTRA_ROLE, "");
 
         // Link the Java variables with the views in the XML
         textMessage = findViewById(R.id.textHouseMessage);
@@ -166,6 +174,11 @@ public class HouseActivity extends AppCompatActivity {
     private void showChoice() {
         textMessage.setText(R.string.house_not_in_any);
         textMessage.setVisibility(View.VISIBLE);
+
+        // Users can only join a house with a code; landlords can only create one
+        buttonShowJoin.setVisibility("User".equals(role) ? View.VISIBLE : View.GONE);
+        buttonShowCreate.setVisibility("Landlord".equals(role) ? View.VISIBLE : View.GONE);
+
         showOnly(layoutChoice);
     }
 
@@ -213,6 +226,9 @@ public class HouseActivity extends AppCompatActivity {
                             // The user already belongs to a house: reload to show it
                             Toast.makeText(HouseActivity.this, R.string.house_already_assigned, Toast.LENGTH_LONG).show();
                             loadHouse();
+                        } else if (response.code() == 403) {
+                            // Only users can join a house with a code
+                            Toast.makeText(HouseActivity.this, R.string.house_wrong_role, Toast.LENGTH_LONG).show();
                         } else {
                             Toast.makeText(HouseActivity.this, R.string.invalid_data, Toast.LENGTH_LONG).show();
                         }
@@ -260,6 +276,9 @@ public class HouseActivity extends AppCompatActivity {
                             // The user already has a house: reload to show it
                             Toast.makeText(HouseActivity.this, R.string.house_already_assigned, Toast.LENGTH_LONG).show();
                             loadHouse();
+                        } else if (response.code() == 403) {
+                            // Only landlords can create a house
+                            Toast.makeText(HouseActivity.this, R.string.house_wrong_role, Toast.LENGTH_LONG).show();
                         } else {
                             Toast.makeText(HouseActivity.this, R.string.invalid_data, Toast.LENGTH_LONG).show();
                         }

@@ -36,6 +36,7 @@ android {
 
 dependencies {
     implementation libs.activity.ktx
+    implementation libs.androidx.navigation.fragment
     implementation libs.appcompat
     implementation libs.constraintlayout
     implementation libs.material

@@ -2,7 +2,9 @@ package com.example.housemate.ui;
 
 import com.example.housemate.R;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -31,6 +33,8 @@ public class LoginActivity extends AppCompatActivity {
     EditText email, password;
     // "Login" and "Register" buttons
     Button login, register;
+
+    public static final String PREFS_NAME = "housemate_session";
 
     // Called by Android when the screen is created.
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,11 +124,19 @@ public class LoginActivity extends AppCompatActivity {
      */
     private void openUserWindow(UserResponse user) {
         Intent intent = new Intent(this, UserActivity.class);
-        // Extras are the data sent to the next screen (read in UserActivity)
+        // The fragments read these values from the Intent, so they must be sent here too
         intent.putExtra(UserActivity.EXTRA_USER_ID, user.id);
         intent.putExtra(UserActivity.EXTRA_USERNAME, user.username);
         intent.putExtra(UserActivity.EXTRA_EMAIL, user.email);
+        intent.putExtra(UserActivity.EXTRA_ROLE, user.role);
+
+        SharedPreferences sharedPref = this.getSharedPreferences(PREFS_NAME,Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putLong(UserActivity.EXTRA_USER_ID, user.id);
+        editor.putString(UserActivity.EXTRA_USERNAME, user.username);
+        editor.putString(UserActivity.EXTRA_EMAIL, user.email);
+        editor.putString(UserActivity.EXTRA_ROLE, user.role);
+        editor.apply();
         startActivity(intent);
-        finish();
     }
 }
