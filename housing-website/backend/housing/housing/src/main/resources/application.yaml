@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: studenthousing
+  datasource:
+    url: jdbc:postgresql://localhost:5432/studenthousing
+    username: postgres
+    password: srlab123
+  jpa:
+    hibernate:
+      ddl-auto: update
+server:
+  port: 8080
